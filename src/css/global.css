@@ -1,0 +1,38 @@
+/* GLOBAL CSS */
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Media */
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Elements */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
