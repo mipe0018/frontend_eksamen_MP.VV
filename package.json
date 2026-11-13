@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "clsx": "^2.1.1",
+    "fuse.js": "^7.5.0",
+    "lucide-react": "^1.72.0",
+    "motion": "^14.13.0",
+    "react-router": "^8.5.1",
+    "sonner": "^2.0.8",
+    "tailwindcss": "^4.3.5",
+    "zustand": "^5.1.0"
+  }
+}
