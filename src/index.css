@@ -39,12 +39,20 @@ a {
   --color-black: oklch(0% 0 0);
 }
 
+
 /* ========================================
    2. TYPOGRAPHY
 ======================================== */
 
 body {
   font-family: "Ubuntu", sans-serif;
+}
+
+.page-hero-title {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 /* ========================================
@@ -60,18 +68,24 @@ body {
 }
 
 .container-content {
-  width: 100%;
+  width: 75%;
   max-width: 1440px;
   margin-inline: auto;
-  padding-inline: 32px;
 }
 
 /* ========================================
    4. RESPONSIVE
 ======================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .container-content {
-    padding-inline: 24px;
+    width: 90%;
   }
 }
+
+@media (max-width: 700px) {
+  .container-content {
+    width: 92%;
+  }
+}
+
