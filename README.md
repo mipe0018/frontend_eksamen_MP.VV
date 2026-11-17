@@ -1,16 +1,46 @@
-# React + Vite
+# Night Club – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a modern nightclub website built with **Next.js** and **React**. The website allows users to explore upcoming events, view event details, make table reservations, and contact the nightclub.
 
-Currently, two official plugins are available:
+## Next.js
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The project uses Next.js with the App Router. Next.js is a React framework that provides features such as file-based routing, server and client components, and built-in performance optimizations.
 
-## React Compiler
+Pages are organized inside the `src/app` directory. Each route is defined by a folder containing a `page.jsx` file.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+For example:
 
-## Expanding the ESLint configuration
+- `src/app/page.jsx` – Home page
+- `src/app/events/page.jsx` – Events page
+- `src/app/book-table/page.jsx` – Table reservations
+- `src/app/contact/page.jsx` – Contact page
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Technologies
+
+The project uses the following technologies and libraries:
+
+- **Next.js** – React framework and routing.
+- **React** – Building user interfaces with reusable components.
+- **Tailwind CSS** – Utility-first CSS framework for styling.
+- **Zustand** – State management.
+- **Fuse.js** – Fuzzy search functionality.
+- **Lucide React** – Icon library.
+
+## Getting Started
+
+First, install the project dependencies:
+
+`npm install`
+
+Then, start the development server:
+
+`npm run dev`
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
+
+## Available Scripts
+
+- `npm run dev` – Starts the development server.
+- `npm run build` – Creates an optimized production build.
+- `npm run start` – Starts the production server.
+- `npm run lint` – Runs ESLint to check the code for errors.
