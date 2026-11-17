@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Liva/Desktop/Project%20Folder%20MMD/frontend_eksamen_MP.VV/frontend_eksamen_MP.VV/src/app/page.jsx"],"sourcesContent":["import Home from \"../pages/Home.jsx\";\n\nexport default function Page() {\n  return <Home />;\n}\r\n"],"names":["Page"],"mappings":";;;;;AAAA;;;AAEe,SAASA;IACtB,qBAAO,8OAAC,gIAAI;;;;;AACd"}},
-    {"offset": {"line": 33, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Liva/Desktop/Project%20Folder%20MMD/frontend_eksamen_MP.VV/frontend_eksamen_MP.VV/src/pages/Home.jsx"],"sourcesContent":["\r\nexport default function Home() {\r\n  return (\r\n    <main className=\"container-content py-8\">\r\n      <h1 className=\"text-3xl font-bold\">\r\n        Home\r\n      </h1>\r\n    </main>\r\n  );\r\n}\r\n"],"names":["Home","className"],"mappings":";;;;;;AACe,SAASA;IACtB,qBACE,8OAAC;QAAKC,WAAU;kBACd,cAAA,8OAAC;YAAGA,WAAU;sBAAqB;;;;;;;;;;;AAKzC"}}]
-}

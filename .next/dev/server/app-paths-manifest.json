@@ -1,7 +1,0 @@
-{
-  "/api-test/page": "app/api-test/page.js",
-  "/book-table/page": "app/book-table/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/events/page": "app/events/page.js",
-  "/page": "app/page.js"
-}
