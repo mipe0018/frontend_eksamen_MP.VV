@@ -1,0 +1,34 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/book-table/layout,_N_T_/book-table/page,_N_T_/book-table"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/book-table/__PAGE__"
+  ],
+  "prefetchHints": {
+    "hints": 64,
+    "slots": {
+      "children": {
+        "hints": 96,
+        "slots": {
+          "children": {
+            "hints": 160,
+            "slots": null
+          }
+        }
+      }
+    }
+  },
+  "routeCache": {
+    "key": "/route-cache/APP_PAGE/415961745194c0110ecf7d7f444f88c4556df3f3a7b9f3981bd335990688cd15/$/book-table",
+    "owner": {
+      "kind": "APP_PAGE",
+      "sourceRoute": "/book-table/page"
+    },
+    "isFallback": false
+  }
+}

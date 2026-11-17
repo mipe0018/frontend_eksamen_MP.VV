@@ -1,4 +1,6 @@
 
+import Image from "next/image";
+
 import footerbg from "../../assets/footerbg.jpg";
 import bottomLine from "../../assets/header/bottom_line.png";
 
@@ -6,7 +8,7 @@ export default function PageHero({ title, showLine = false }) {
   return (
     <section
       className="relative flex min-h-[clamp(10rem,20vh,16rem)] items-center justify-center bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${footerbg})` }}
+      style={{ backgroundImage: `url(${footerbg.src})` }}
     >
       {/* Mørkt overlay */}
       <div className="absolute inset-0 bg-black/50" />
@@ -18,7 +20,7 @@ export default function PageHero({ title, showLine = false }) {
         </h1>
 
         {showLine && (
-          <img
+          <Image
             src={bottomLine}
             alt=""
             aria-hidden="true"

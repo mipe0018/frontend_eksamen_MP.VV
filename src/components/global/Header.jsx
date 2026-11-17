@@ -1,6 +1,10 @@
 
+"use client";
+
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
+
 import logo from "../../assets/header/Logo.png";
 import bottomLine from "../../assets/header/bottom_line2.png";
 
@@ -53,14 +57,15 @@ export default function Header() {
       >
         {/* Logo til venstre */}
         <Link
-          to="/"
+          href="/"
           aria-label="Go to homepage"
           className="shrink-0"
         >
-          <img
+          <Image
             src={logo}
             alt="AskExperts"
             className="h-10 w-auto object-contain"
+            priority
           />
         </Link>
 
@@ -69,19 +74,18 @@ export default function Header() {
           {links.map((link) => (
             <li key={link.href}>
               <Link
-                to={link.href}
+                href={link.href}
                 className="group relative inline-block text-sm font-semibold transition-colors duration-300 hover:text-[var(--color-primary)] focus-visible:text-[var(--color-primary)]"
               >
                 {link.name}
 
                 {/* Dekorativ streg ved hover */}
-<img
-  src={bottomLine}
-  alt=""
-  aria-hidden="true"
-  className="pointer-events-none absolute top-full left-1/2 mt-1 w-[100px] max-w-none -translate-x-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
-/>
-
+                <Image
+                  src={bottomLine}
+                  alt=""
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-full left-1/2 mt-1 w-[100px] max-w-none -translate-x-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                />
               </Link>
             </li>
           ))}
@@ -136,7 +140,7 @@ export default function Header() {
           {links.map((link) => (
             <Link
               key={link.href}
-              to={link.href}
+              href={link.href}
               onClick={() => setOpen(false)}
               className="border-b border-neutral-700 py-4 transition-colors duration-300 hover:text-[var(--color-primary)] focus-visible:text-[var(--color-primary)]"
             >
