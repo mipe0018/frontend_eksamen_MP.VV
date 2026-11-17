@@ -1,13 +1,10 @@
-import Header from "../components/global/Header.jsx";
 
-export default function Contact() {
+import PageHero from "../components/global/PageHero.jsx";
+
+export default function BookTable() {
   return (
-    <>
-      <Header />
-
-      <main className="p-8">
-        <h1 className="text-3xl font-bold">Book Table</h1>
-      </main>
-    </>
+    <main>
+      <PageHero title="Book Table" showLine />
+    </main>
   );
 }

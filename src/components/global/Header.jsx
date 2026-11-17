@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/header/Logo.png";
+import bottomLine from "../../assets/header/bottom_line2.png";
 
 const links = [
   { name: "Home", href: "/" },
@@ -31,7 +32,7 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="relative w-full bg-black text-white">
+    <header className="relative w-full border-y border-[var(--color-primary)] bg-black text-white">
 
       {/* Trekant øverst til venstre */}
       <div
@@ -45,12 +46,11 @@ export default function Header() {
         className="pointer-events-none absolute right-0 bottom-0 h-10 w-10 bg-[var(--color-primary)] [clip-path:polygon(100%_0,100%_100%,0_100%)]"
       />
 
-      {/* Container: Maks. 1400px, centreret */}
+      {/* Centreret container */}
       <nav
         aria-label="Main navigation"
-        className="relative z-10 mx-auto flex w-full max-w-[1400px] items-center justify-between gap-8 px-8 py-5 max-[700px]:px-6"
+        className="container-content relative z-10 flex items-center justify-between gap-8 py-5"
       >
-
         {/* Logo til venstre */}
         <Link
           to="/"
@@ -64,32 +64,30 @@ export default function Header() {
           />
         </Link>
 
-        {/* Desktop navigation til højre */}
+        {/* Desktop navigation */}
         <ul className="ml-auto flex items-center gap-8 max-[700px]:hidden">
           {links.map((link) => (
             <li key={link.href}>
               <Link
                 to={link.href}
-                className="relative text-sm font-semibold"
+                className="group relative inline-block text-sm font-semibold transition-colors duration-300 hover:text-[var(--color-primary)] focus-visible:text-[var(--color-primary)]"
               >
                 {link.name}
 
-                {/* Hover underline - aktiveres senere:
-                    after:absolute after:inset-x-0
-                    after:-bottom-2 after:h-[3px]
-                    after:rounded-full
-                    after:bg-[var(--color-primary)]
-                    after:scale-x-0
-                    after:transition-transform
-                    hover:after:scale-x-100
-                    focus-visible:after:scale-x-100
-                */}
+                {/* Dekorativ streg ved hover */}
+<img
+  src={bottomLine}
+  alt=""
+  aria-hidden="true"
+  className="pointer-events-none absolute top-full left-1/2 mt-1 w-[100px] max-w-none -translate-x-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+/>
+
               </Link>
             </li>
           ))}
         </ul>
 
-        {/* Burgerknap til højre på mobil */}
+        {/* Burgerknap på mobil */}
         <button
           type="button"
           className="ml-auto hidden text-3xl leading-none max-[700px]:block"
@@ -120,7 +118,6 @@ export default function Header() {
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
-
         {/* Luk mobilmenu */}
         <button
           type="button"
@@ -141,13 +138,9 @@ export default function Header() {
               key={link.href}
               to={link.href}
               onClick={() => setOpen(false)}
-              className="border-b border-neutral-700 py-4"
+              className="border-b border-neutral-700 py-4 transition-colors duration-300 hover:text-[var(--color-primary)] focus-visible:text-[var(--color-primary)]"
             >
               {link.name}
-
-              {/* Hover - aktiveres senere:
-                  hover:text-[var(--color-primary)]
-              */}
             </Link>
           ))}
         </nav>
