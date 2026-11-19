@@ -11,7 +11,7 @@ export default function PageHero({ title, showLine = false }) {
       style={{ backgroundImage: `url(${footerbg.src})` }}
     >
       {/* Mørkt overlay */}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-black/75" />
 
       {/* Overskrift og dekorativ streg */}
       <div className="relative z-10 flex flex-col items-center">
