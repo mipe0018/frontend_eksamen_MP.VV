@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import logo from "../../assets/header/Logo.png";
-import bottomLine from "../../assets/header/bottom_line2.png";
+import logo from "../../assets/header/Logo.webp";
+import bottomLine from "../../assets/header/bottom_line2.webp";
 
 const links = [
   { name: "Home", href: "/" },
