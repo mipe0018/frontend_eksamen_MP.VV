@@ -1,5 +1,4 @@
-﻿
-import PageHero from "../../components/global/PageHero.jsx";
+﻿import PageHero from "../../components/global/PageHero.jsx";
 
 export default function BookTable() {
   return (
