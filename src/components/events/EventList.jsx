@@ -5,113 +5,159 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// API-adresse
-const API_URL = "https://backend-eksamen-mp-vv.onrender.com";
+// Lokale billeder fra Figma
+import neonNightsImage from "../../assets/event/blog_full1.jpg";
+import retroRewindImage from "../../assets/event/blog_full2.jpg";
+import bassDropImage from "../../assets/event/blog_center3.jpg";
 
-// Antal events pr. side
 const EVENTS_PER_PAGE = 3;
 
-// Figma-billeder til de tre første events
-import blogFull1 from "../../assets/event/blog_full1.jpg";
-import blogFull2 from "../../assets/event/blog_full2.jpg";
-import blogCenter3 from "../../assets/event/blog_center3.jpg";
+const API_URL = "https://backend-eksamen-mp-vv.onrender.com";
 
-const LOCAL_EVENT_IMAGES = {
-  "neon-nights-grand-opening": blogFull1,
-  "retro-rewind-80s-90s": blogFull2,
-  "bass-drop-dubstep-edition": blogCenter3,
-};
+// Indholdet på første side følger Figma-designet
+const FIGMA_EVENTS = [
+  {
+    slug: "neon-nights-grand-opening",
+    title: "Neon Nights Grand Opening",
+    dateText: "May 9",
+    timeText: "21:00",
+    location: "Center Stage",
+    excerpt:
+      "Night Club opens its doors again with an evening of house, visuals, and live percussion on the main stage. Guests can expect welcome drinks from 21:00, an upgraded lighting setup, and a program that builds toward a big countdown show at midnight.",
+    image: neonNightsImage,
+    imageAlt: "DJ playing records under red stage lighting",
+  },
+  {
+    slug: "retro-rewind-80s-90s",
+    title: "Retro Rewind: 80s & 90s",
+    dateText: "May 16",
+    timeText: "21:00",
+    location: "Center Stage",
+    excerpt:
+      "A full evening dedicated to classic floorfillers from the 80s and 90s. The DJ team mixes pop, disco, and old school R&B while the bar serves signature cocktails inspired by the biggest club hits of the era.",
+    image: retroRewindImage,
+    imageAlt: "DJ performing with purple stage lights",
+  },
+  {
+    slug: "bass-drop-dubstep-edition",
+    title: "Bass Drop: Dubstep Edition",
+    dateText: "May 22",
+    timeText: "21:00",
+    location: "Center Stage",
+    excerpt:
+      "Friday's program pushes tempo and sub-bass all the way up with guest DJs, an MC host, and a crowd that comes for heavy drops and a dark club atmosphere. The night is aimed at guests who want to get close to the stage and feel the sound physically.",
+    image: bassDropImage,
+    imageAlt: "Performer on stage under blue lighting",
+  },
+];
 
-export default function EventList({ events }) {
+export default function EventList({ events = [] }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Beregn det samlede antal sider
-  const totalPages = Math.ceil(events.length / EVENTS_PER_PAGE);
+  // Find de tre events fra Figma i API-dataene.
+  // API'et leverer stadig eventets id og slug til navigationen.
+  const figmaEvents = FIGMA_EVENTS.map((figmaEvent) => {
+    const apiEvent = events.find(
+      (event) => event.slug === figmaEvent.slug
+    );
 
-  // Beregn hvilket event der skal vises først
+    if (!apiEvent) {
+      return null;
+    }
+
+    return {
+      ...apiEvent,
+      ...figmaEvent,
+    };
+  }).filter(Boolean);
+
+  // Fjern de tre Figma-events fra resten af API-listen.
+  const remainingEvents = events.filter(
+    (event) =>
+      !FIGMA_EVENTS.some(
+        (figmaEvent) => figmaEvent.slug === event.slug
+      )
+  );
+
+  // Første side bruger Figma-indholdet.
+  // De efterfølgende sider bruger resten af API-dataene.
+  const allDisplayEvents = [...figmaEvents, ...remainingEvents];
+
+  // Beregn antal sider.
+  const totalPages = Math.ceil(
+    allDisplayEvents.length / EVENTS_PER_PAGE
+  );
+
+  // Udvælg events til den aktuelle side.
   const startIndex = (currentPage - 1) * EVENTS_PER_PAGE;
 
-  // Udvælg de tre events til den aktuelle side
-  const currentEvents = events.slice(
+  const currentEvents = allDisplayEvents.slice(
     startIndex,
     startIndex + EVENTS_PER_PAGE
   );
 
-  // Formater datoen
-  function formatDate(date) {
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-    }).format(new Date(date));
-  }
-
-  // Formater tidspunktet
-  function formatTime(date) {
-    return new Intl.DateTimeFormat("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(date));
-  }
-
   return (
-    <div className="w-full">
-
+    <section className="w-full">
       {/* Eventliste */}
-      <div>
+      <div className="w-full">
         {currentEvents.map((event, index) => {
-
-          // Brug lokalt Figma-billede, hvis det findes.
-          // Ellers hentes billedet fra API'et.
-          const imageSrc =
-            LOCAL_EVENT_IMAGES[event.slug] ||
-            (event.asset?.url
-              ? event.asset.url.startsWith("http")
-                ? event.asset.url
-                : `${API_URL}${event.asset.url}`
-              : null);
+          const isFigmaEvent = currentPage === 1;
 
           return (
             <article
               key={event.id}
-              className={`grid grid-cols-1 min-[800px]:grid-cols-2 ${
-                index % 2 !== 0 ? "min-[800px]:[&>*:first-child]:order-2" : ""
+              className={`flex flex-col min-[800px]:flex-row ${
+                index % 2 !== 0
+                  ? "min-[800px]:flex-row-reverse"
+                  : ""
               }`}
             >
-
               {/* Eventbillede */}
-              <div className="relative w-full aspect-[960/530] overflow-hidden">
-
-                {imageSrc ? (
+              <div className="relative w-full aspect-[960/530] min-[800px]:w-1/2 min-[800px]:aspect-[960/530]">
+                {isFigmaEvent && event.image ? (
                   <Image
-                    src={imageSrc}
-                    alt={event.asset?.alt || event.title}
+                    src={event.image}
+                    alt={event.imageAlt || event.title}
                     fill
+                    priority={index === 0}
                     sizes="(max-width: 799px) 100vw, 50vw"
                     className="object-cover"
                   />
-                ) : (
-                  <div className="flex items-center justify-center h-full bg-neutral-900 text-white">
-                    Image unavailable
-                  </div>
-                )}
-
+                ) : event.asset?.url ? (
+                  <Image
+                    src={`${API_URL}${event.asset.url}`}
+                    alt={event.asset.alt || event.title}
+                    fill
+                    sizes="(max-width: 799px) 100vw, 50vw"
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : null}
               </div>
 
               {/* Eventinformation */}
-              <div className="flex flex-col justify-between bg-black text-white p-6 min-[800px]:p-10">
-
+              <div className="flex w-full min-[800px]:w-1/2 flex-col justify-between bg-black text-white px-[15px] py-8 min-[800px]:px-10 min-[800px]:py-7">
                 <div>
-
                   {/* Eventtitel */}
-                  <h2 className="text-sm font-bold uppercase mb-3">
+                  <h2 className="mb-3 text-base font-bold uppercase leading-tight">
                     {event.title}
                   </h2>
 
-                  {/* Dato, tidspunkt og sted */}
-                  <p className="text-[10px] mb-4 uppercase">
-
-                    <span className="text-[#FF2A70] font-bold">
-                      {formatDate(event.date)} · {formatTime(event.date)}
+                  {/* Dato, tidspunkt og lokation */}
+                  <p className="mb-4 text-xs font-medium uppercase">
+                    <span className="font-bold text-[#FF2A70]">
+                      {isFigmaEvent
+                        ? `${event.dateText} · ${event.timeText}`
+                        : `${new Intl.DateTimeFormat("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          }).format(new Date(event.date))} · ${new Intl.DateTimeFormat(
+                            "en-GB",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          ).format(new Date(event.date))}`}
                     </span>
 
                     <span className="mx-2 text-white">|</span>
@@ -119,77 +165,60 @@ export default function EventList({ events }) {
                     <span className="text-white">
                       {event.location}
                     </span>
-
                   </p>
 
                   {/* Eventbeskrivelse */}
-                  <p className="text-xs text-gray-300 leading-relaxed">
+                  <p className="text-xs leading-relaxed text-gray-300">
                     {event.excerpt}
                   </p>
-
                 </div>
 
                 {/* Read More */}
-               
-
-<div className="flex justify-end mt-8 min-[800px]:mt-0 min-[800px]:pt-8">
-  <Link
-    href={`/events/${event.slug}`}
-    className="inline-flex justify-center items-center border-y border-white py-2 px-6 text-[10px] font-bold uppercase text-white hover:text-[#FF2A70] hover:border-[#FF2A70] transition-colors duration-300"
-  >
-    Read More
-  </Link>
-</div>
-
-
-
+                <div className="mt-8 flex justify-center min-[800px]:justify-end min-[800px]:pr-4">
+                  <Link
+                    href={`/events/${event.slug}`}
+                    className="border-y border-white px-6 py-2 text-center text-xs font-bold uppercase text-white transition hover:border-[#FF2A70] hover:text-[#FF2A70]"
+                  >
+                    Read More
+                  </Link>
+                </div>
               </div>
-
             </article>
           );
         })}
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <nav
-          aria-label="Event pages"
-          className="flex justify-center items-center gap-4 py-16 text-white"
-        >
+      <nav
+        aria-label="Event pages"
+        className="flex min-h-[130px] items-center justify-center gap-4 bg-black text-white"
+      >
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            aria-current={
+              currentPage === index + 1 ? "page" : undefined
+            }
+            className={`text-sm font-bold transition ${
+              currentPage === index + 1
+                ? "text-[#FF2A70]"
+                : "text-white hover:text-[#FF2A70]"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
 
-          {/* Sidetal */}
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => setCurrentPage(index + 1)}
-              aria-current={
-                currentPage === index + 1 ? "page" : undefined
-              }
-              className={`text-sm font-bold transition-colors duration-300 ${
-                currentPage === index + 1
-                  ? "text-[#FF2A70] underline underline-offset-4"
-                  : "text-white hover:text-[#FF2A70]"
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-
-          {/* Næste side */}
-          {currentPage < totalPages && (
-            <button
-              type="button"
-              onClick={() => setCurrentPage(currentPage + 1)}
-              className="text-sm font-bold text-white hover:text-[#FF2A70] transition-colors duration-300"
-            >
-              NÆSTE &gt;
-            </button>
-          )}
-
-        </nav>
-      )}
-
-    </div>
+        {currentPage < totalPages && (
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="text-sm font-bold text-white transition hover:text-[#FF2A70]"
+          >
+            næste &gt;
+          </button>
+        )}
+      </nav>
+    </section>
   );
 }
