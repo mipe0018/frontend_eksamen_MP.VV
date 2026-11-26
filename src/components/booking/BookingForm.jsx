@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { DEMO_STORAGE_KEY, DEMO_LAST_BOOKING_KEY, migrateDemoStorage } from "@/lib/demoStorage";
+import {
+  DEMO_STORAGE_KEY,
+  DEMO_LAST_BOOKING_KEY,
+  migrateDemoStorage,
+} from "@/lib/demoStorage";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { bookingSchema } from "@/lib/validations/bookingSchema";
 
 import {
@@ -17,8 +21,10 @@ import { tables } from "@/data/tables";
 const DEMO_RESERVED_TABLES = [3, 8, 13];
 
 // === DEMO RESERVATIONS ===
+
 function getDemoReservations() {
   migrateDemoStorage();
+
   const stored = localStorage.getItem(DEMO_STORAGE_KEY);
 
   if (!stored) return [];
@@ -33,6 +39,7 @@ function getDemoReservations() {
 }
 
 // === SAVE DEMO BOOKING ===
+
 function saveDemoBooking({
   selectedEvent,
   selectedTableIds,
@@ -49,8 +56,7 @@ function saveDemoBooking({
   ];
 
   const alreadyReserved = selectedTableIds.some(
-    (tableId) =>
-      reservedTables.includes(Number(tableId))
+    (tableId) => reservedTables.includes(Number(tableId))
   );
 
   if (alreadyReserved) {
@@ -59,26 +65,23 @@ function saveDemoBooking({
 
   const bookingId = crypto.randomUUID();
 
-  const newReservations = selectedTableIds.map(
-    (tableId) => ({
-      id: crypto.randomUUID(),
-      bookingId,
-      eventId: selectedEvent.id,
+  const newReservations = selectedTableIds.map((tableId) => ({
+    id: crypto.randomUUID(),
+    bookingId,
+    eventId: selectedEvent.id,
 
-      name: data.name.trim(),
-      email: data.email.trim(),
+    name: data.name.trim(),
+    email: data.email.trim(),
+    phone: "",
 
-      phone: "",
+    guests: String(data.guests),
+    table: String(tableId),
+    date: eventDate,
 
-      guests: String(data.guests),
-      table: String(tableId),
-      date: eventDate,
+    comment: data.comment?.trim() ?? "",
 
-      comment: data.comment?.trim() ?? "",
-
-      isDemo: true,
-    })
-  );
+    isDemo: true,
+  }));
 
   localStorage.setItem(
     DEMO_STORAGE_KEY,
@@ -105,20 +108,20 @@ function saveDemoBooking({
 }
 
 // === BOOKING FORM ===
+
 export default function BookingForm({
   selectedEvent,
   selectedTableIds = [],
   occupiedTableIds = [],
-
   bookingDisabled = false,
-
   onSuccess,
 }) {
-
   const [status, setStatus] = useState("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const isDemo = selectedEvent?.isDemo === true;
+
+  // === FORM VALIDATION ===
 
   const {
     register,
@@ -139,6 +142,8 @@ export default function BookingForm({
     },
   });
 
+  // === SHARED INPUT STYLING ===
+
   const inputClass = `
     w-full min-w-0
     border border-white/30
@@ -153,17 +158,23 @@ export default function BookingForm({
     disabled:opacity-50
   `;
 
+  // === SELECTED TABLES ===
+
   const selectedTables = tables.filter((table) =>
     selectedTableIds.some(
       (id) => Number(id) === Number(table.id)
     )
   );
 
+  // Calculate the total capacity of selected tables
+
   const totalCapacity = selectedTables.reduce(
     (total, table) =>
       total + Number(table.capacity),
     0
   );
+
+  // Check whether a selected table is occupied
 
   const hasOccupiedTable = selectedTableIds.some(
     (tableId) =>
@@ -176,6 +187,8 @@ export default function BookingForm({
     ? selectedTableIds.length > 0
     : selectedTableIds.length === 1;
 
+  // Determine whether the booking can be submitted
+
   const canSubmit =
     !bookingDisabled &&
     Boolean(selectedEvent) &&
@@ -184,6 +197,7 @@ export default function BookingForm({
     !hasOccupiedTable;
 
   // === SUBMIT BOOKING ===
+
   async function onSubmit(data) {
     setStatus("idle");
     setErrorMessage("");
@@ -202,6 +216,8 @@ export default function BookingForm({
       return;
     }
 
+    // Validate the number of guests
+
     if (
       Number(data.guests) < 1 ||
       Number(data.guests) > totalCapacity
@@ -217,6 +233,8 @@ export default function BookingForm({
 
     const eventDate =
       selectedEvent.doorsOpen ?? selectedEvent.date;
+
+    // Check whether the event is still available
 
     if (
       !isDemo &&
@@ -238,6 +256,8 @@ export default function BookingForm({
     try {
       let reservation;
 
+      // === DEMO BOOKING ===
+
       if (isDemo) {
         reservation = saveDemoBooking({
           selectedEvent,
@@ -245,7 +265,10 @@ export default function BookingForm({
           data,
           eventDate,
         });
+
       } else {
+
+        // === REAL BOOKING ===
 
         const currentReservations =
           await getEventReservations(selectedEvent.id);
@@ -267,7 +290,6 @@ export default function BookingForm({
         reservation = await createReservation({
           name: data.name.trim(),
           email: data.email.trim(),
-
           phone: "",
 
           guests: String(data.guests),
@@ -277,10 +299,13 @@ export default function BookingForm({
         });
       }
 
+      // Reset form after successful booking
+
       reset();
       setStatus("success");
 
       onSuccess?.(reservation);
+
     } catch (error) {
       console.error("Booking failed:", error);
 
@@ -294,18 +319,23 @@ export default function BookingForm({
     }
   }
 
-  return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-      className="mx-auto flex w-full max-w-2xl flex-col gap-4"
-    >
+  // === FORM UI ===
 
-      <h2 className="mb-4 text-2xl font-semibold uppercase">
-        Book a Table
-      </h2>
+return (
+  <form
+    onSubmit={handleSubmit(onSubmit)}
+    noValidate
+    className="flex w-full flex-col gap-4 px-2 md:px-4 lg:px-6"
+  >
+    {/* === FORM HEADING === */}
+    <h2 className="mb-4 w-full text-left text-3xl font-semibold uppercase text-white">
+      Book a Table
+    </h2>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    {/* === FORM FIELDS === */}
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+        {/* Name */}
 
         <div className="flex flex-col gap-2">
           <label
@@ -332,6 +362,8 @@ export default function BookingForm({
           )}
         </div>
 
+        {/* Email */}
+
         <div className="flex flex-col gap-2">
           <label
             htmlFor="booking-email"
@@ -357,6 +389,8 @@ export default function BookingForm({
           )}
         </div>
 
+        {/* Selected tables */}
+
         <div className="flex flex-col gap-2">
           <label
             htmlFor="booking-tables"
@@ -374,6 +408,8 @@ export default function BookingForm({
             className={`${inputClass} cursor-default`}
           />
         </div>
+
+        {/* Number of guests */}
 
         <div className="flex flex-col gap-2">
           <label
@@ -407,6 +443,8 @@ export default function BookingForm({
           )}
         </div>
 
+        {/* Selected event */}
+
         <div className="flex flex-col gap-2 sm:col-span-2">
           <label
             htmlFor="booking-event"
@@ -424,6 +462,8 @@ export default function BookingForm({
             className={`${inputClass} cursor-default`}
           />
         </div>
+
+        {/* Optional comment */}
 
         <div className="flex flex-col gap-2 sm:col-span-2">
           <label
@@ -448,7 +488,10 @@ export default function BookingForm({
             </p>
           )}
         </div>
+
       </div>
+
+      {/* Booking error */}
 
       {status === "error" && errorMessage && (
         <p
@@ -459,11 +502,15 @@ export default function BookingForm({
         </p>
       )}
 
+      {/* Table selection information */}
+
       {!bookingDisabled && selectedTableIds.length === 0 && (
         <p className="text-sm text-gray-400">
           Please select a table above to complete your booking.
         </p>
       )}
+
+      {/* Submit button */}
 
       <div className="mt-1 flex w-full justify-end">
         <button
@@ -484,6 +531,7 @@ export default function BookingForm({
           {isSubmitting ? "Reserving..." : "Reserve"}
         </button>
       </div>
+
     </form>
   );
 }
