@@ -90,3 +90,39 @@ body {
   }
 }
 
+/* ========================================
+   TABLE GRID
+======================================== */
+
+/* Desktop */
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2.5rem 1rem;
+  padding-block: 2.5rem;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .table-grid {
+    grid-template-columns: repeat(5, calc((100% - 1rem) / 2));
+    grid-template-rows: repeat(3, auto);
+    gap: 1.5rem 1rem;
+    padding-block: 1.5rem;
+
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .table-grid > div {
+    scroll-snap-align: start;
+  }
+
+  .table-grid::-webkit-scrollbar {
+    display: none;
+  }
+}
