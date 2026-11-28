@@ -151,14 +151,15 @@ export default function EventList({ events = [] }) {
           aria-label="Event pages"
           className="flex min-h-[130px] w-full items-center justify-center gap-6 bg-black text-white"
         >
-          {/* Previous button */}
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="text-sm font-bold transition hover:text-[oklch(65.3%_0.243_9.4)] disabled:cursor-not-allowed disabled:opacity-30"
-          >
-            previous
-          </button>
+          {/* Previous button - vises ikke på første side */}
+          {currentPage > 1 && (
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="text-sm font-bold transition hover:text-[oklch(65.3%_0.243_9.4)]"
+            >
+              previous
+            </button>
+          )}
 
           {/* Page numbers */}
           {Array.from({ length: totalPages }, (_, index) => (
@@ -178,14 +179,15 @@ export default function EventList({ events = [] }) {
             </button>
           ))}
 
-          {/* Next button */}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="text-sm font-bold transition hover:text-[oklch(65.3%_0.243_9.4)] disabled:cursor-not-allowed disabled:opacity-30"
-          >
-            next
-          </button>
+          {/* Next button - vises ikke på sidste side */}
+          {currentPage < totalPages && (
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="text-sm font-bold transition hover:text-[oklch(65.3%_0.243_9.4)]"
+            >
+              next
+            </button>
+          )}
         </nav>
       )}
     </section>
