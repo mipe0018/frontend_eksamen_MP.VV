@@ -1,7 +1,8 @@
 
 import Image from "next/image";
 
-import footerbg from "../../assets/footerbg.webp";
+import footerbg from "../../assets/footer/footerbg.webp";
+
 import bottomLine from "../../assets/header/bottom_line.webp";
 
 export default function PageHero({ title, showLine = false }) {

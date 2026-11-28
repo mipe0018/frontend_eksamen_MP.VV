@@ -1,10 +1,11 @@
 
 import Image from "next/image";
 
-import footerBg from "../../assets/footerbg.webp";
+import footerBg from "../../assets/footer/footerbg.webp";
 import logo from "../../assets/header/Logo.webp";
-import recentPost1 from "../../assets/recent_post1.jpg";
-import recentPost2 from "../../assets/recent_post2.jpg";
+import recentPost1 from "../../assets/footer/recent_post1.jpg";
+import recentPost2 from "../../assets/footer/recent_post2.jpg";
+
 
 const newsItems = [
   {
